@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="zh-hans" >
+<head>
+<title>注册 | 资产管理系统</title>
+<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/regist.css' %}" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css" />
+<meta name="robots" content="NONE,NOARCHIVE" />
+<script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+<script type="text/javascript" src="{% static '127.0.0.1_files/jquery.js' %}"></script>
+<script type="text/javascript" src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+</head>
+
+<body class=" login" data-admin-utc-offset="28800">
+{% if messages %}
+<script>
+    {% for msg in messages %}
+        alert('{{ msg.message }}');
+    {% endfor %}
+</script>
+{% endif %}
+<!-- Container -->
+<div id="container">
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+            <h1 id="site-name"><a href="/admin/">资产管理系统注册</a></h1>
+        </div>
+    </div>
+    <!-- END Header -->
+    <!-- Content -->
+    <div id="content" class="colM">
+<div id="content-main">
+<form method = 'post' enctype="multipart/form-data" id="login-form">
+    {% csrf_token %}
+    {% for field in userform %}
+        <div class="form-row">
+        {{ field.label_tag }}{{ field }}
+        {{ field.errors }}
+        </div>
+    {% endfor %}
+<!-- input type="submit" value = "注册" id="TencentCaptcha" data-appid="2036447301"
+        data-cbfn="check"/ -->
+    <input type="submit" value = "注册">
+</form>
+</div>
+        <br class="clear" />
+    </div>
+    <!-- END Content -->
+    <div id="footer"></div>
+</div>
+
+
+<script type="text/javascript">
+    window.check = function(res){
+    console.log(res)
+    // res（未通过验证）= {ret: 1, ticket: null}
+    // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
+    if(res.ret === 0){
+        $.get('http://127.0.0.1:8000/regist/', {ticket:res.ticket, randstr:res.randstr, ip:returnCitySN["cip"]});
+        }
+    }
+
+    function beforeSubmit() {
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+    if (username.length < 6 || password.length < 6) {
+        alert('格式不正确！');
+        return false;
+    } else {
+        return true;
+
+    }
+}
+</script>
+
+<!-- END Container -->
+</body>
+</html>
